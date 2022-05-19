@@ -2,3 +2,1059 @@
   <app-mars-client> </app-mars-client>
   <app-hersheys-client> </app-hersheys-client>
 </div>
+
+<div class="modal-body p-0 m-0 main-border">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-12 mt-2">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 pt-2">
+                <span class="text-uppercase font-weight-bold"
+                  >Filters
+                  <ng-container *ngIf="filtersCount.TotalCount > 0"
+                    >({{ filtersCount.TotalCount }})</ng-container
+                  >
+                </span>
+              </div>
+              <div class="col-md-6 text-end">
+                <button
+                  type="button"
+                  class="btn btn-link mr-2 clear-all-button font-weight-bold"
+                  (click)="clearAll()"
+                  style="float:right"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div class="row m-2">
+              <div
+                class="col-12 border p-2"
+                style="height:75px; overflow-y: scroll;"
+              >
+                <ng-container>
+                  <span
+                    class="
+                      badge badge-secondary
+                      mr-2
+                      tag-item
+                      border
+                      rounded
+                      font-weight-normal
+                    "
+                    *ngFor="let item of selectedFilters"
+                  >
+                    <span
+                      (click)="removeSingleFilter(item.Type, item.Value)"
+                      style="cursor: pointer"
+                      class="custom-blue-color font-weight-light"
+                      >X</span
+                    >
+                    {{ item.Value }}</span
+                  >
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-12">
+            <div class="row">
+              <!-- left panel -->
+              <div class="col-5 col-md-5 left-filter-menu">
+                <div class="row">
+                  <!-- sales hierarchy -->
+                  <div
+                    class="
+                      col-md-12
+                      pt-1
+                      pb-1
+                      pr-1
+                      pl-3
+                      mb-1
+                      text-start
+                      sectionHeading
+                      text-uppercase
+                    "
+                  >
+                    SALES HIERARCHY
+                  </div>
+
+                  <!-- area -->
+                  <div
+                    class="col-md-12 pt-2 pb-2 pr-2 mb-1 text-start sectionItem"
+                    style="padding-left: 2rem;"
+                    (click)="OnAreaClick()"
+                    [ngClass]="
+                      selectedSection === 'area'
+                        ? 'font-weight-bold selectedSection'
+                        : 'font-weight-normal'
+                    "
+                  >
+                    Area
+                    <span
+                      class="
+                        float-right
+                        pr-2
+                        custom-blue-color
+                        font-weight-bold
+                      "
+                      *ngIf="filtersCount.Area > 0"
+                    >
+                      {{ filtersCount.Area }}
+                    </span>
+                  </div>
+
+                  <ng-container *ngIf="dataFromDashboard.ProjectOid == 49">
+                    <!-- district -->
+                    <div
+                      class="
+                        col-md-12
+                        pt-2
+                        pb-2
+                        pr-2
+                        mb-1
+                        text-start
+                        sectionItem
+                      "
+                      style="padding-left: 2rem;"
+                      (click)="OnDistrictClick()"
+                      [ngClass]="
+                        selectedSection === 'district'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      District
+                      <span
+                        class="
+                          float-right
+                          pr-2
+                          custom-blue-color
+                          font-weight-bold
+                        "
+                        *ngIf="filtersCount.District > 0"
+                      >
+                        {{ filtersCount.District }}
+                      </span>
+                    </div>
+
+                    <!-- sub district -->
+                    <div
+                      class="
+                        col-md-12
+                        pt-2
+                        pb-2
+                        pr-2
+                        mb-1
+                        text-start
+                        sectionItem
+                      "
+                      style="padding-left: 2rem;"
+                      (click)="OnSubDistrictClick()"
+                      [ngClass]="
+                        selectedSection === 'subDistrict'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      Subdistrict
+                      <span
+                        class="
+                          float-right
+                          pr-2
+                          custom-blue-color
+                          font-weight-bold
+                        "
+                        *ngIf="filtersCount.SubDistrict > 0"
+                      >
+                        {{ filtersCount.SubDistrict }}
+                      </span>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="dataFromDashboard.ProjectOid != 49">
+                    <!-- region -->
+                    <div
+                      class="
+                        col-md-12
+                        pt-2
+                        pb-2
+                        pr-2
+                        mb-1
+                        text-start
+                        sectionItem
+                      "
+                      style="padding-left: 2rem;"
+                      (click)="OnRegionClick()"
+                      [ngClass]="
+                        selectedSection === 'region'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      Region
+                      <span
+                        class="
+                          float-right
+                          pr-2
+                          custom-blue-color
+                          font-weight-bold
+                        "
+                        *ngIf="filtersCount.Region > 0"
+                      >
+                        {{ filtersCount.Region }}
+                      </span>
+                    </div>
+                  </ng-container>
+
+                  <!-- territory -->
+                  <div
+                    class="col-md-12 pt-2 pb-2 pr-2 mb-1 text-start sectionItem"
+                    style="padding-left: 2rem;"
+                    (click)="OnTerritoryClick()"
+                    [ngClass]="
+                      selectedSection === 'territory'
+                        ? 'font-weight-bold selectedSection'
+                        : 'font-weight-normal'
+                    "
+                  >
+                    Territory
+                    <span
+                      class="
+                        float-right
+                        pr-2
+                        custom-blue-color
+                        font-weight-bold
+                      "
+                      *ngIf="filtersCount.Territory > 0"
+                    >
+                      {{ filtersCount.Territory }}
+                    </span>
+                  </div>
+                  <!-- MARS filters -->
+                  <ng-container *ngIf="dataFromDashboard.ProjectOid == 37">
+                    <div
+                      class="
+                        col-md-12
+                        pt-1
+                        pb-1
+                        pr-1
+                        pl-3
+                        mb-1
+                        text-start
+                        sectionHeading
+                        text-uppercase
+                      "
+                    >
+                      Account Hierarchy
+                    </div>
+
+                    <!-- Sales Directory  -->
+
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnSalesDirectorClick()"
+                      [ngClass]="
+                        selectedSection === 'salesDirector'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'salesDirector',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.SalesDirector > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Sales Director
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.SalesDirector > 0"
+                          >
+                            {{ filtersCount.SalesDirector }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- DSM BROKER MANAGER -->
+
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnDsmBrokerManagerClick()"
+                      [ngClass]="
+                        selectedSection === 'dsmBrokerManager'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'dsmBrokerManager',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.DsmBrokerManager > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          DSM/Broker Manager
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.DsmBrokerManager > 0"
+                          >
+                            {{ filtersCount.DsmBrokerManager }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CDM Account MANAGER -->
+
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnCdmAccountManagerClick()"
+                      [ngClass]="
+                        selectedSection === 'cdmAccountManager'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'cdmAccountManager',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.CdmAccountManager > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          CDM/Account Manager
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.CdmAccountManager > 0"
+                          >
+                            {{ filtersCount.CdmAccountManager }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Parent Chain Name-->
+
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnMwcParentChainNameClick()"
+                      [ngClass]="
+                        selectedSection === 'mwcParentChainName'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'mwcParentChainName',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.MwcParentChainName > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Parent Chain
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.MwcParentChainName > 0"
+                          >
+                            {{ filtersCount.MwcParentChainName }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Devision Chain Name-->
+
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnMwcDivChainNameClick()"
+                      [ngClass]="
+                        selectedSection === 'mwcDivChainName'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'mwcDivChainName',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.MwcDivChainName > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Divisional Chain
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.MwcDivChainName > 0"
+                          >
+                            {{ filtersCount.MwcDivChainName }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <!-- Hersheys Retail Filter section -->
+                  <ng-container *ngIf="dataFromDashboard.ProjectOid == 49">
+                    <div
+                      class="
+                        col-md-12
+                        pt-1
+                        pb-1
+                        pr-1
+                        pl-3
+                        mb-1
+                        text-start
+                        sectionHeading
+                        text-uppercase
+                      "
+                    >
+                      Key Retailer Account
+                    </div>
+
+                    <!-- Retail Area  -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnRetailAreaClick()"
+                      [ngClass]="
+                        selectedSection === 'retailArea'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'retailArea',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.RetailArea > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Area
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.RetailArea > 0"
+                          >
+                            {{ filtersCount.RetailArea }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Retail Sales Rep  -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnRetailSalesRepClick()"
+                      [ngClass]="
+                        selectedSection === 'retailSalesRep'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'retailSalesRep',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.RetailSalesRep > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Rep
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.RetailArea > 0"
+                          >
+                            {{ filtersCount.RetailSalesRep }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Retail Account -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnKeyAccountClick()"
+                      [ngClass]="
+                        selectedSection === 'keyAccount'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'keyAccount',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.KeyAccount > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Account
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.KeyAccount > 0"
+                          >
+                            {{ filtersCount.KeyAccount }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Hersheys Distributor Filter section -->
+
+                    <div
+                      class="
+                        col-md-12
+                        pt-1
+                        pb-1
+                        pr-1
+                        pl-3
+                        mb-1
+                        text-start
+                        sectionHeading
+                        text-uppercase
+                      "
+                    >
+                      Key Distributor Account
+                    </div>
+
+                    <!-- dist Area  -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnDistAreaClick()"
+                      [ngClass]="
+                        selectedSection === 'distArea'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'distArea',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.distArea > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Area
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bol
+                            "
+                            *ngIf="filtersCount.DistArea > 0"
+                          >
+                            {{ filtersCount.DistArea }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Dist Sales Rep  -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnDistSalesRepClick()"
+                      [ngClass]="
+                        selectedSection === 'distSalesRep'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'distSalesRep',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.DistSalesRep > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Rep
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.DistSalesRep > 0"
+                          >
+                            {{ filtersCount.DistSalesRep }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Dist Account -->
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnDistributorClick()"
+                      [ngClass]="
+                        selectedSection === 'distributor'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'distributor',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.Distributor > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Account
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.Distributor > 0"
+                          >
+                            {{ filtersCount.Distributor }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <div
+                    class="
+                      col-md-12
+                      pt-1
+                      pb-1
+                      pr-1
+                      pl-3
+                      mb-1
+                      text-start
+                      sectionHeading
+                      text-uppercase
+                    "
+                  >
+                    Other
+                  </div>
+
+                  <!-- enrolled by -->
+
+                  <div
+                    class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                    (click)="OnEnrolledByClick()"
+                    [ngClass]="
+                      selectedSection === 'enrolledBy'
+                        ? 'font-weight-bold selectedSection'
+                        : 'font-weight-normal'
+                    "
+                  >
+                    <div class="row m-0 p-0">
+                      <div class="col-2 m-0 pt-1 pr-1 text-end">
+                        <input
+                          type="checkbox"
+                          (change)="
+                            onChangeChecboxSection(
+                              'enrolledBy',
+                              $event.target.checked
+                            )
+                          "
+                          [checked]="filtersCount.EnrolledBy > 0"
+                        />
+                      </div>
+                      <div
+                        class="col-10 m-0 p-0 text-start"
+                        style="padding-top:2px !important"
+                      >
+                        Enrolled By
+                        <span
+                          class="
+                            float-right
+                            pr-2
+                            custom-blue-color
+                            font-weight-bold
+                          "
+                          *ngIf="filtersCount.EnrolledBy > 0"
+                        >
+                          {{ filtersCount.EnrolledBy }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                    (click)="OnStoreTypeClick()"
+                    [ngClass]="
+                      selectedSection === 'storeType'
+                        ? 'font-weight-bold selectedSection'
+                        : 'font-weight-normal'
+                    "
+                  >
+                    <div class="row m-0 p-0">
+                      <div class="col-2 m-0 pt-1 pr-1 text-end">
+                        <input
+                          type="checkbox"
+                          (change)="
+                            onChangeChecboxSection(
+                              'storeType',
+                              $event.target.checked
+                            )
+                          "
+                          [checked]="filtersCount.StoreType > 0"
+                        />
+                      </div>
+                      <div
+                        class="col-10 m-0 p-0 text-start"
+                        style="padding-top:2px !important"
+                      >
+                        Store Type
+                        <span
+                          class="
+                            float-right
+                            pr-2
+                            custom-blue-color
+                            font-weight-bold
+                          "
+                          *ngIf="filtersCount.StoreType > 0"
+                        >
+                          {{ filtersCount.StoreType }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- chain -->
+
+                  <div
+                    *ngIf="isDisplayChain"
+                    class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                    (click)="OnChainClick()"
+                    [ngClass]="
+                      selectedSection === 'chain'
+                        ? 'font-weight-bold selectedSection'
+                        : 'font-weight-normal'
+                    "
+                  >
+                    <div class="row m-0 p-0">
+                      <div class="col-2 m-0 pt-1 pr-1 text-end">
+                        <input
+                          type="checkbox"
+                          (change)="
+                            onChangeChecboxSection(
+                              'chain',
+                              $event.target.checked
+                            )
+                          "
+                          [checked]="filtersCount.Chain > 0"
+                        />
+                      </div>
+                      <div
+                        class="col-10 m-0 p-0 text-start"
+                        style="padding-top:2px !important"
+                      >
+                        Chain
+                        <span
+                          class="
+                            float-right
+                            pr-2
+                            custom-blue-color
+                            font-weight-bold
+                          "
+                          *ngIf="filtersCount.Chain > 0"
+                        >
+                          {{ filtersCount.Chain }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-container *ngIf="dataFromDashboard.ProjectOid != 49">
+                    <div
+                      class="col-md-12 p-2 pl-3 mb-1 text-start sectionItem"
+                      (click)="OnDistributorClick()"
+                      [ngClass]="
+                        selectedSection === 'distributor'
+                          ? 'font-weight-bold selectedSection'
+                          : 'font-weight-normal'
+                      "
+                    >
+                      <div class="row m-0 p-0">
+                        <div class="col-2 m-0 pt-1 pr-1 text-end">
+                          <input
+                            type="checkbox"
+                            (change)="
+                              onChangeChecboxSection(
+                                'distributor',
+                                $event.target.checked
+                              )
+                            "
+                            [checked]="filtersCount.Distributor > 0"
+                          />
+                        </div>
+                        <div
+                          class="col-10 m-0 p-0 text-start"
+                          style="padding-top:2px !important"
+                        >
+                          Distributor
+                          <span
+                            class="
+                              float-right
+                              pr-2
+                              custom-blue-color
+                              font-weight-bold
+                            "
+                            *ngIf="filtersCount.Distributor > 0"
+                          >
+                            {{ filtersCount.Distributor }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-7 col-md-7">
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                    <input
+                      type="text"
+                      class="mb-2 form-control"
+                      [value]="itemSearched"
+                      placeholder="Search"
+                      (input)="onSearchChange($event.target.value)"
+                      style="background-color:#f8f8f8; border:0; border-radius:0"
+                    />
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-12 pr-4">
+                        <div class="row" [ngStyle]="getPrimaryDataHeight()">
+                          <ng-container
+                            *ngIf="selectedSectionType != 'SalesHierarchy'"
+                          >
+                            <div
+                              class="col-md-12 mb-1 section-array-div"
+                              *ngFor="let item of afterSearch"
+                            >
+                              <div
+                                (click)="checkBoxEvent(item.Flag, item.Value)"
+                                [ngClass]="
+                                  item.Flag
+                                    ? 'font-weight-bold selectedSection p-1 pl-2'
+                                    : 'font-weight-normal p-1 pl-2'
+                                "
+                              >
+                                <input type="checkbox" [checked]="item.Flag" />
+                                {{ item.Text }}
+                              </div>
+                            </div>
+                          </ng-container>
+
+                          <ng-container
+                            *ngIf="selectedSectionType == 'SalesHierarchy'"
+                          >
+                            <div
+                              class="col-md-12 mb-1 section-array-div"
+                              *ngFor="let item of afterSearch"
+                            >
+                              <div
+                                (click)="radioButtonEvent(true, item.Value)"
+                                [ngClass]="
+                                  item.Flag
+                                    ? 'font-weight-bold selectedSection p-1 pl-2'
+                                    : 'font-weight-normal p-1 pl-2'
+                                "
+                              >
+                                <input
+                                  type="radio"
+                                  [value]="item.Flag"
+                                  [checked]="item.Flag"
+                                />
+                                {{ item.Text }}
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row border-top pt-3 pb-3 pr-1">
+          <div class="col-md-12 text-end">
+            <div style="float: right;">
+              <button
+                type="button"
+                class="btn btn-link mr-2 custom-text-color"
+                (click)="cancel()"
+              >
+                Cancel</button
+              >&nbsp;
+              <button
+                type="button"
+                class="btn btn-primary ml-2 text-uppercase"
+                style="background-color: #06597a;"
+                (click)="ApplyFilter()"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
