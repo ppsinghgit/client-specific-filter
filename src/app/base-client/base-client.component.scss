@@ -1,0 +1,162 @@
+igx-select {
+  width: 100%;
+}
+
+.pie-chart {
+  height: 17rem;
+  // width:31rem;
+  margin-top: 0rem;
+}
+
+.bar-chart {
+  height: 20rem;
+  // width:31rem;
+  margin-top: 0rem;
+}
+
+.filterButton {
+  border-color: blue;
+}
+
+::ng-deep .custom-tooltip {
+  max-width: unset !important;
+  font-size: 12px;
+  white-space: pre-line;
+}
+
+::ng-deep .custom-tooltip-expanded-width {
+  max-width: unset !important;
+  font-size: 12px;
+  white-space: pre-line;
+  margin-left: 2rem !important;
+}
+
+.filterButton {
+  color: #005481 !important;
+  border-color: #005481 !important;
+  cursor: pointer;
+}
+
+.filterButtonDisabled {
+  color: #005481 !important;
+  border-color: white !important;
+  background-color: grey !important;
+  cursor: wait !important;
+}
+
+.FooterStyle {
+  margin-top: 17px;
+  margin-left: 580px;
+}
+
+.ViewBtn {
+  margin-top: -34px;
+  margin-left: 1429px;
+}
+
+#circle-compliant {
+  background: #00b050;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+#circle-noncompliant {
+  background: #dfeafe;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.individual-section {
+  color: #344562;
+}
+
+.number-in-sections {
+  font-size: 111%;
+}
+
+.brder {
+  border-right: 1px solid #dee2e6;
+}
+
+.legend-line-chart-this-year {
+  background: #00b050;
+  width: 40px;
+  height: 10px;
+  display: inline-block;
+}
+
+.legend-line-chart-last-year {
+  background: #dfeafe;
+  width: 40px;
+  height: 10px;
+  display: inline-block;
+}
+
+@media (max-width: 1024px) {
+  .variable-top-margin {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .variable-top-margin {
+    margin-top: -50px;
+  }
+}
+
+.select-item {
+  flex: 0 0 auto;
+}
+
+.grid {
+  margin: 15px;
+  min-width: 200px;
+  // min-height: 400px;
+  flex: 1 1 auto;
+}
+
+.custom-div {
+  overflow: scroll;
+  max-height: 100%;
+  //width: 70%;
+  margin: 0px 15px;
+  border: 1px solid #f1f1f1;
+  padding-top: 11px;
+  height: 10rem !important;
+  padding-left: 0.7rem !important;
+}
+
+.custom-margin {
+  // margin-right: 10px !important;
+  flex: 0 0 auto;
+  width: 23%;
+}
+
+.btn-view-save-grid {
+  flex: 0 0 auto;
+  width: 22.7%;
+}
+
+.custom-product-support {
+  flex: 0 0 auto;
+  width: 29.3%;
+}
+
+.btn-viewcontract-desktop {
+  margin-top: 0.5rem;
+  float: right;
+  margin-left: 2%;
+  flex: 0 0 auto;
+  width: 21%;
+}
+
+.filter {
+  min-width: 0px !important;
+  min-height: 0px !important;
+  width: 100%;
+}

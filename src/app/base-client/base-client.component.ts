@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DashboardService } from '../dashboard/dashboard.service';
-import { FilterDropdownOutput, FilterDropdownInput, ApiDropdownData } from '../dashboard/models/dashboard.model';
+import {
+  FilterDropdownOutput,
+  FilterDropdownInput,
+  ApiDropdownData,
+} from './dashboard.model';
 import {
   Dropdowndata,
   DropdowndataFilterModal,
@@ -11,9 +13,9 @@ import {
 } from './filter-modal.model';
 
 @Component({
-  selector: 'app-filter-modal',
-  templateUrl: './filter-modal.component.html',
-  styleUrls: ['./filter-modal.component.scss'],
+  selector: 'app-base-client',
+  templateUrl: './base-client.component.html',
+  styleUrls: ['./base-client.component.scss'],
 })
 export class BaseClientComponent implements OnInit {
   public primaryDdlData: Dropdowndata[];
@@ -29,27 +31,34 @@ export class BaseClientComponent implements OnInit {
     new ShowSelectedFiltersCountBySection();
   public closeResult: string;
 
-  @Input() public dataFromDashboard: FilterModel;
-  @Input() public filterModelOriginalCopy: FilterModel;
+  public dataFromDashboard: FilterModel;
+  public filterModelOriginalCopy: FilterModel;
   private filterModel: FilterModel;
 
   public filterModelInCaseCancel: FilterModel;
   filterDropdownInput: FilterDropdownInput;
   filterDropdownOutput: FilterDropdownOutput;
   public isDisplayChain: boolean = false;
-  constructor(
-    public activeModal: NgbActiveModal,
-    private dashboardService: DashboardService) {
+  constructor() {
     this.selectedFilters = [];
+    this.dataFromDashboard = JSON.parse(
+      '{"TotalFilterAppliedCount":0,"ProjectOid":37,"Year":2021,"TradeProgramName":"MARS Performance Rewards Program 2021(Distributor)","Term":"1","Regions":[{"Text":"NY","Value":"NY","Flag":false,"Type":"SalesHierarchy"}],"Areas":[{"Text":"New York","Value":"New York","Flag":false,"Type":"SalesHierarchy"}],"Territories":[{"Text":"30103","Value":"30103","Flag":false,"Type":"SalesHierarchy"}],"StoreTypes":[{"Text":"Undefined","Value":"Undefined","Flag":false,"Type":"Other"}],"Distributors":[{"Text":"ABL Wholesale #1","Value":"ABL Wholesale #1","Flag":false,"Type":"Other"}],"Chains":[],"EnrolledBys":[{"Text":"Gundam Akhil","Value":"2008585","Flag":false,"Type":"Other"}],"MwcParentChainNames":[],"MwcDivChainNames":[],"SalesDirectors":[],"DsmBrokerManagers":[],"CdmAccountManagers":[],"Districts":[],"SubDistricts":[],"DistAreas":[],"DistSalesReps":[],"RetailAreas":[],"RetailSalesReps":[],"KeyAccounts":[]}'
+    );
+    this.filterModelOriginalCopy = this.dataFromDashboard;
+    this.filterModel = this.filterModelOriginalCopy;
   }
 
   ngOnInit() {
-    this.filterModel = JSON.parse(JSON.stringify(this.dataFromDashboard)) as FilterModel;
+    this.filterModel = JSON.parse(
+      JSON.stringify(this.dataFromDashboard)
+    ) as FilterModel;
     this.initiate();
   }
 
   initiate() {
-    this.filterModelInCaseCancel = JSON.parse(JSON.stringify(this.filterModel)) as FilterModel;
+    this.filterModelInCaseCancel = JSON.parse(
+      JSON.stringify(this.filterModel)
+    ) as FilterModel;
     this.primaryDdlData = [];
     this.afterSearch = [];
     this.itemSearched = '';
@@ -255,7 +264,9 @@ export class BaseClientComponent implements OnInit {
     this.selectedSection = 'none';
     this.selectedFilters = [];
     this.filtersCount = new ShowSelectedFiltersCountBySection();
-    this.filterModel = JSON.parse(JSON.stringify(this.filterModelOriginalCopy)) as FilterModel;
+    this.filterModel = JSON.parse(
+      JSON.stringify(this.filterModelOriginalCopy)
+    ) as FilterModel;
     this.isDisplayChainOrNot();
   }
 
@@ -312,21 +323,19 @@ export class BaseClientComponent implements OnInit {
     ).length;
 
     /* CLIENT SPECIFIC FILTERS */
-    this.filtersCount.MwcParentChainName = this.filterModel?.MwcParentChainNames.filter(
-      (x) => x.Flag == true
-    ).length;
-    this.filtersCount.MwcDivChainName = this.filterModel?.MwcDivChainNames.filter(
-      (x) => x.Flag == true
-    ).length;
+    this.filtersCount.MwcParentChainName =
+      this.filterModel?.MwcParentChainNames.filter(
+        (x) => x.Flag == true
+      ).length;
+    this.filtersCount.MwcDivChainName =
+      this.filterModel?.MwcDivChainNames.filter((x) => x.Flag == true).length;
     this.filtersCount.SalesDirector = this.filterModel?.SalesDirectors.filter(
       (x) => x.Flag == true
     ).length;
-    this.filtersCount.DsmBrokerManager = this.filterModel?.DsmBrokerManagers.filter(
-      (x) => x.Flag == true
-    ).length;
-    this.filtersCount.CdmAccountManager = this.filterModel?.CdmAccountManagers.filter(
-      (x) => x.Flag == true
-    ).length;
+    this.filtersCount.DsmBrokerManager =
+      this.filterModel?.DsmBrokerManagers.filter((x) => x.Flag == true).length;
+    this.filtersCount.CdmAccountManager =
+      this.filterModel?.CdmAccountManagers.filter((x) => x.Flag == true).length;
     this.filtersCount.District = this.filterModel?.Districts.filter(
       (x) => x.Flag == true
     ).length;
@@ -374,7 +383,6 @@ export class BaseClientComponent implements OnInit {
     this.isDisplayChainOrNot();
 
     this.createTagsForSelectedFiltes('');
-
   }
 
   public removeSingleFilter(type: string, value: string) {
@@ -385,47 +393,37 @@ export class BaseClientComponent implements OnInit {
           this.filterModel.Regions[i].Flag = false;
         }
       }
-    }
-    else if (type == sections.Area) {
+    } else if (type == sections.Area) {
       for (let i = 0; i < this.filterModel.Areas.length; i++) {
         if (this.filterModel.Areas[i].Text == value) {
           this.filterModel.Areas[i].Flag = false;
         }
       }
-    }
-    else if (type == sections.Territory) {
+    } else if (type == sections.Territory) {
       for (let i = 0; i < this.filterModel.Territories.length; i++) {
         if (this.filterModel.Territories[i].Text == value) {
           this.filterModel.Territories[i].Flag = false;
         }
       }
-    }
-
-    else if (type == sections.StoreType) {
+    } else if (type == sections.StoreType) {
       for (let i = 0; i < this.filterModel.StoreTypes.length; i++) {
         if (this.filterModel.StoreTypes[i].Text == value) {
           this.filterModel.StoreTypes[i].Flag = false;
         }
       }
-    }
-
-    else if (type == sections.Distributor) {
+    } else if (type == sections.Distributor) {
       for (let i = 0; i < this.filterModel.Distributors.length; i++) {
         if (this.filterModel.Distributors[i].Text == value) {
           this.filterModel.Distributors[i].Flag = false;
         }
       }
-    }
-
-    else if (type == sections.EnrolledBy) {
+    } else if (type == sections.EnrolledBy) {
       for (let i = 0; i < this.filterModel.EnrolledBys.length; i++) {
         if (this.filterModel.EnrolledBys[i].Text == value) {
           this.filterModel.EnrolledBys[i].Flag = false;
         }
       }
-    }
-
-    else if (type == sections.Chain) {
+    } else if (type == sections.Chain) {
       for (let i = 0; i < this.filterModel.Chains.length; i++) {
         if (this.filterModel.Chains[i].Text == value) {
           this.filterModel.Chains[i].Flag = false;
@@ -534,8 +532,6 @@ export class BaseClientComponent implements OnInit {
       }
     }
 
-
-
     let index = this.selectedFilters.findIndex(
       (x) => x.Type == type && x.Value == value
     );
@@ -549,12 +545,9 @@ export class BaseClientComponent implements OnInit {
   public ApplyFilter() {
     this.filterModel.Status = 1;
     this.filterModel.TotalFilterAppliedCount = this.filtersCount.TotalCount;
-    this.activeModal.close(this.filterModel);
   }
 
-  public cancel() {
-    this.activeModal.close(this.filterModelInCaseCancel);
-  }
+  public cancel() {}
 
   private getOptionalFilterDropdowns() {
     sessionStorage.setItem('isSpinnerRequired', 'yes');
@@ -563,401 +556,547 @@ export class BaseClientComponent implements OnInit {
     this.filterDropdownInput.UserPermissions = this.filterModel.UserPermissions;
     this.filterDropdownInput.ProjectOid = this.filterModel.ProjectOid;
     this.filterDropdownInput.ComplianceYear = this.filterModel.Year;
-    this.filterDropdownInput.TradeProgramName = this.filterModel.TradeProgramName;
+    this.filterDropdownInput.TradeProgramName =
+      this.filterModel.TradeProgramName;
     this.filterDropdownInput.Term = this.filterModel.Term;
 
-    this.filterDropdownInput.Region = this.setValueToNullIfBlank(this.filterModel.Regions.filter(x => x.Flag == true).map(x => x.Value).toString());
-    this.filterDropdownInput.Area = this.setValueToNullIfBlank(this.filterModel.Areas.filter(x => x.Flag == true).map(x => x.Value).toString());
-    this.filterDropdownInput.Territory = this.setValueToNullIfBlank(this.filterModel.Territories.filter(x => x.Flag == true).map(x => x.Value).toString());
-    this.filterDropdownInput.StoreType = this.setValueToNullIfBlank(this.filterModel.StoreTypes.filter(x => x.Flag == true).map(x => x.Value).toString());
-
+    this.filterDropdownInput.Region = this.setValueToNullIfBlank(
+      this.filterModel.Regions.filter((x) => x.Flag == true)
+        .map((x) => x.Value)
+        .toString()
+    );
+    this.filterDropdownInput.Area = this.setValueToNullIfBlank(
+      this.filterModel.Areas.filter((x) => x.Flag == true)
+        .map((x) => x.Value)
+        .toString()
+    );
+    this.filterDropdownInput.Territory = this.setValueToNullIfBlank(
+      this.filterModel.Territories.filter((x) => x.Flag == true)
+        .map((x) => x.Value)
+        .toString()
+    );
+    this.filterDropdownInput.StoreType = this.setValueToNullIfBlank(
+      this.filterModel.StoreTypes.filter((x) => x.Flag == true)
+        .map((x) => x.Value)
+        .toString()
+    );
 
     // Chain
-    if (this.filterModel.Chains.length == this.filterModel.Chains.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.Chains.length ==
+      this.filterModel.Chains.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.Chain = null;
-    }
-    else {
-      this.filterDropdownInput.Chain = this.setValueToNullIfBlank(this.filterModel.Chains.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.Chain = this.setValueToNullIfBlank(
+        this.filterModel.Chains.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // Distributor
-    if (this.filterModel.Distributors.length == this.filterModel.Distributors.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.Distributors.length ==
+      this.filterModel.Distributors.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.Distributor = null;
-    }
-    else {
-      this.filterDropdownInput.Distributor = this.setValueToNullIfBlank(this.filterModel.Distributors.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.Distributor = this.setValueToNullIfBlank(
+        this.filterModel.Distributors.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // Enrolled By
-    if (this.filterModel.EnrolledBys.length == this.filterModel.EnrolledBys.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.EnrolledBys.length ==
+      this.filterModel.EnrolledBys.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.EnrolledBy = null;
-    }
-    else {
-      this.filterDropdownInput.EnrolledBy = this.setValueToNullIfBlank(this.filterModel.EnrolledBys.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.EnrolledBy = this.setValueToNullIfBlank(
+        this.filterModel.EnrolledBys.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // MwcParentChainName
-    if (this.filterModel.MwcParentChainNames.length == this.filterModel.MwcParentChainNames.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.MwcParentChainNames.length ==
+      this.filterModel.MwcParentChainNames.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.MwcParentChainName = null;
-    }
-    else {
-      this.filterDropdownInput.MwcParentChainName = this.setValueToNullIfBlank(this.filterModel.MwcParentChainNames.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.MwcParentChainName = this.setValueToNullIfBlank(
+        this.filterModel.MwcParentChainNames.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // MwcDivChainName
-    if (this.filterModel.MwcDivChainNames.length == this.filterModel.MwcDivChainNames.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.MwcDivChainNames.length ==
+      this.filterModel.MwcDivChainNames.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.MwcDivChainName = null;
-    }
-    else {
-      this.filterDropdownInput.MwcDivChainName = this.setValueToNullIfBlank(this.filterModel.MwcDivChainNames.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.MwcDivChainName = this.setValueToNullIfBlank(
+        this.filterModel.MwcDivChainNames.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // CdmAccountManager
-    if (this.filterModel.CdmAccountManagers.length == this.filterModel.CdmAccountManagers.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.CdmAccountManagers.length ==
+      this.filterModel.CdmAccountManagers.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.CdmAccountManager = null;
-    }
-    else {
-      this.filterDropdownInput.CdmAccountManager = this.setValueToNullIfBlank(this.filterModel.CdmAccountManagers.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.CdmAccountManager = this.setValueToNullIfBlank(
+        this.filterModel.CdmAccountManagers.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // SalesDirector
-    if (this.filterModel.SalesDirectors.length == this.filterModel.SalesDirectors.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.SalesDirectors.length ==
+      this.filterModel.SalesDirectors.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.SalesDirector = null;
-    }
-    else {
-      this.filterDropdownInput.SalesDirector = this.setValueToNullIfBlank(this.filterModel.SalesDirectors.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.SalesDirector = this.setValueToNullIfBlank(
+        this.filterModel.SalesDirectors.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // DsmBrokerManager
-    if (this.filterModel.DsmBrokerManagers.length == this.filterModel.DsmBrokerManagers.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.DsmBrokerManagers.length ==
+      this.filterModel.DsmBrokerManagers.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.DsmBrokerManager = null;
-    }
-    else {
-      this.filterDropdownInput.DsmBrokerManager = this.setValueToNullIfBlank(this.filterModel.DsmBrokerManagers.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.DsmBrokerManager = this.setValueToNullIfBlank(
+        this.filterModel.DsmBrokerManagers.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // District
-    if (this.filterModel.Districts.length == this.filterModel.Districts.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.Districts.length ==
+      this.filterModel.Districts.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.District = null;
-    }
-    else {
-      this.filterDropdownInput.District = this.setValueToNullIfBlank(this.filterModel.Districts.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.District = this.setValueToNullIfBlank(
+        this.filterModel.Districts.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // District
-    if (this.filterModel.SubDistricts.length == this.filterModel.SubDistricts.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.SubDistricts.length ==
+      this.filterModel.SubDistricts.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.SubDistrict = null;
-    }
-    else {
-      this.filterDropdownInput.SubDistrict = this.setValueToNullIfBlank(this.filterModel.SubDistricts.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.SubDistrict = this.setValueToNullIfBlank(
+        this.filterModel.SubDistricts.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // DistArea
-    if (this.filterModel.DistAreas.length == this.filterModel.DistAreas.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.DistAreas.length ==
+      this.filterModel.DistAreas.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.DistArea = null;
-    }
-    else {
-      this.filterDropdownInput.DistArea = this.setValueToNullIfBlank(this.filterModel.DistAreas.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.DistArea = this.setValueToNullIfBlank(
+        this.filterModel.DistAreas.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // DistSalesRep
-    if (this.filterModel.DistSalesReps.length == this.filterModel.DistSalesReps.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.DistSalesReps.length ==
+      this.filterModel.DistSalesReps.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.DistSalesRep = null;
-    }
-    else {
-      this.filterDropdownInput.DistSalesRep = this.setValueToNullIfBlank(this.filterModel.DistSalesReps.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.DistSalesRep = this.setValueToNullIfBlank(
+        this.filterModel.DistSalesReps.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // RetailArea
-    if (this.filterModel.RetailAreas.length == this.filterModel.RetailAreas.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.RetailAreas.length ==
+      this.filterModel.RetailAreas.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.RetailArea = null;
-    }
-    else {
-      this.filterDropdownInput.RetailArea = this.setValueToNullIfBlank(this.filterModel.RetailAreas.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.RetailArea = this.setValueToNullIfBlank(
+        this.filterModel.RetailAreas.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // Retail Sales Rep
-    if (this.filterModel.RetailSalesReps.length == this.filterModel.RetailSalesReps.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.RetailSalesReps.length ==
+      this.filterModel.RetailSalesReps.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.RetailSalesRep = null;
-    }
-    else {
-      this.filterDropdownInput.RetailSalesRep = this.setValueToNullIfBlank(this.filterModel.RetailSalesReps.filter(x => x.Flag == true).map(x => x.Value).toString());
+    } else {
+      this.filterDropdownInput.RetailSalesRep = this.setValueToNullIfBlank(
+        this.filterModel.RetailSalesReps.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
 
     // KeyAccount
-    if (this.filterModel.KeyAccounts.length == this.filterModel.KeyAccounts.filter(x => x.Flag == true).length) {
+    if (
+      this.filterModel.KeyAccounts.length ==
+      this.filterModel.KeyAccounts.filter((x) => x.Flag == true).length
+    ) {
       this.filterDropdownInput.KeyAccount = null;
+    } else {
+      this.filterDropdownInput.KeyAccount = this.setValueToNullIfBlank(
+        this.filterModel.KeyAccounts.filter((x) => x.Flag == true)
+          .map((x) => x.Value)
+          .toString()
+      );
     }
-    else {
-      this.filterDropdownInput.KeyAccount = this.setValueToNullIfBlank(this.filterModel.KeyAccounts.filter(x => x.Flag == true).map(x => x.Value).toString());
-    }
 
-    this.dashboardService.FilterDropdowns(this.filterDropdownInput).subscribe(data => {
+    let data = JSON.parse(
+      '{"StoreTypeData":[{"Value":"Undefined","Text":"Undefined"}],"AreaData":[{"Value":"New York","Text":"New York"}],"RegionData":[{"Value":"NY","Text":"NY"}],"TerritoryData":[{"Value":"30103","Text":"30103"}],"DistributorData":[{"Value":"ABL Wholesale #1","Text":"ABL Wholesale #1"}],"ChainData":[],"EnrolledByData":[{"Value":"2008585","Text":"Gundam Akhil"}],"MwcParentChainNameData":[],"MwcDivChainNameData":[],"CdmAccountManagerData":[],"SalesDirectorData":[],"DsmBrokerManagerData":[],"DistrictData":[],"SubDistrictData":[],"DistAreaData":[],"DistSalesRepData":[],"RetailAreaData":[],"RetailSalesRepData":[],"KeyAccountData":[]}'
+    );
+    if (data != null && data != undefined) {
+      let convertedApiData = [];
+      this.filterDropdownOutput = new FilterDropdownOutput();
+      this.filterDropdownOutput = data as FilterDropdownOutput;
 
-      if (data != null && data != undefined) {
-        let convertedApiData = [];
-        this.filterDropdownOutput = new FilterDropdownOutput();
-        this.filterDropdownOutput = data as FilterDropdownOutput;
-
-        //region
-        if (this.filterDropdownOutput.RegionData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.RegionData as ApiDropdownData[],
-            sectionType.SalesHierarchy
-          );
-          this.filterModel.Regions = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.Region), convertedApiData);
-        }
-        else {
-          this.filterModel.Regions = [];
-        }
-        // area
-        if (this.filterDropdownOutput.AreaData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.AreaData as ApiDropdownData[],
-            sectionType.SalesHierarchy
-          );
-          this.filterModel.Areas = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.Area), convertedApiData);
-        }
-        else {
-          this.filterModel.Areas = [];
-        }
-
-        //territory
-
-        if (this.filterDropdownOutput.TerritoryData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.TerritoryData as ApiDropdownData[],
-            sectionType.SalesHierarchy
-          );
-          this.filterModel.Territories = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.Territory), convertedApiData);
-        }
-        else {
-          this.filterModel.Territories = [];
-        }
-
-
-        // storeType
-        if (this.filterDropdownOutput.StoreTypeData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.StoreTypeData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.StoreTypes = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.StoreType), convertedApiData);
-
-        }
-        else {
-          this.filterModel.StoreTypes = [];
-        }
-
-        // distributors
-        if (this.filterDropdownOutput.DistributorData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.DistributorData as ApiDropdownData[],
-            sectionType.Other
-          );
-
-          this.filterModel.Distributors = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.Distributor), convertedApiData);
-        }
-        else {
-          this.filterModel.Distributors = [];
-        }
-
-        // chain
-        if (this.filterDropdownOutput.ChainData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.ChainData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.Chains = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.Chain), convertedApiData);
-        }
-        else {
-          this.filterModel.Chains = [];
-        }
-
-        // enrolledBy
-        if (this.filterDropdownOutput.EnrolledByData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.EnrolledByData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.EnrolledBys = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.EnrolledBy), convertedApiData);
-        }
-        else {
-          this.filterModel.EnrolledBys = [];
-        }
-
-        // Mwc Parent Chain Names
-        if (this.filterDropdownOutput.MwcParentChainNameData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.MwcParentChainNameData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.MwcParentChainNames = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.MwcParentChainName), convertedApiData);
-        }
-        else {
-          this.filterModel.MwcParentChainNames = [];
-        }
-
-        // Mwc  DivChain Names
-        if (this.filterDropdownOutput.MwcDivChainNameData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.MwcDivChainNameData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.MwcDivChainNames = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.MwcDivChainName), convertedApiData);
-        }
-        else {
-          this.filterModel.MwcDivChainNames = [];
-        }
-        // Sales Directors
-        if (this.filterDropdownOutput.SalesDirectorData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.SalesDirectorData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.SalesDirectors = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.SalesDirector), convertedApiData);
-        }
-        else {
-          this.filterModel.SalesDirectors = [];
-        }
-
-        // Dsm  Broker Managers
-        if (this.filterDropdownOutput.DsmBrokerManagerData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.DsmBrokerManagerData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.DsmBrokerManagers = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.DsmBrokerManager), convertedApiData);
-        }
-        else {
-          this.filterModel.DsmBrokerManagers = [];
-        }
-
-
-        // public CdmAccountManagers: Dropdowndata[];
-        if (this.filterDropdownOutput.CdmAccountManagerData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.CdmAccountManagerData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.CdmAccountManagers = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.CdmAccountManager), convertedApiData);
-        }
-        else {
-          this.filterModel.CdmAccountManagers = [];
-        }
-
-        // Districts
-        if (this.filterDropdownOutput.DistrictData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.DistrictData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.Districts = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.District), convertedApiData);
-        }
-        else {
-          this.filterModel.Districts = [];
-        }
-
-        // Sub Districts
-        if (this.filterDropdownOutput.SubDistrictData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.SubDistrictData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.SubDistricts = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.SubDistrict
-          ), convertedApiData);
-        }
-        else {
-          this.filterModel.Districts = [];
-        }
-
-        //Dist Areas
-        if (this.filterDropdownOutput.DistAreaData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.DistAreaData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.DistAreas = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.DistArea), convertedApiData);
-        }
-        else {
-          this.filterModel.DistAreas = [];
-        }
-
-        // Dist Sales Reps
-        if (this.filterDropdownOutput.DistSalesRepData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.DistSalesRepData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.DistSalesReps = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.DistSalesRep), convertedApiData);
-        }
-        else {
-          this.filterModel.DistSalesReps = [];
-        }
-
-
-        //Retail Areas
-        if (this.filterDropdownOutput.RetailAreaData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.RetailAreaData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.RetailAreas = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.RetailArea), convertedApiData);
-        }
-        else {
-          this.filterModel.RetailAreas = [];
-        }
-
-        // Retail Sales Reps
-        if (this.filterDropdownOutput.RetailSalesRepData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.RetailSalesRepData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.RetailSalesReps = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.RetailSalesRep), convertedApiData);
-        }
-        else {
-          this.filterModel.RetailSalesReps = [];
-        }
-
-        // Account Key
-        if (this.filterDropdownOutput.KeyAccountData) {
-          convertedApiData = null;
-          convertedApiData = this.convertDropdownDataToFilterModal(
-            this.filterDropdownOutput.KeyAccountData as ApiDropdownData[],
-            sectionType.Other
-          );
-          this.filterModel.KeyAccounts = this.retainSelection(this.selectedFilters.filter(x => x.Type == sections.KeyAccount), convertedApiData);
-        }
-        else {
-          this.filterModel.KeyAccounts = [];
-        }
-
-        sessionStorage.setItem('isSpinnerRequired', 'no');
-
-        this.setPrimaryDataAfterUpdation();
+      //region
+      if (this.filterDropdownOutput.RegionData) {
         convertedApiData = null;
-
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.RegionData as ApiDropdownData[],
+          sectionType.SalesHierarchy
+        );
+        this.filterModel.Regions = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.Region),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Regions = [];
       }
-    });
+      // area
+      if (this.filterDropdownOutput.AreaData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.AreaData as ApiDropdownData[],
+          sectionType.SalesHierarchy
+        );
+        this.filterModel.Areas = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.Area),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Areas = [];
+      }
+
+      //territory
+
+      if (this.filterDropdownOutput.TerritoryData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.TerritoryData as ApiDropdownData[],
+          sectionType.SalesHierarchy
+        );
+        this.filterModel.Territories = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.Territory),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Territories = [];
+      }
+
+      // storeType
+      if (this.filterDropdownOutput.StoreTypeData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.StoreTypeData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.StoreTypes = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.StoreType),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.StoreTypes = [];
+      }
+
+      // distributors
+      if (this.filterDropdownOutput.DistributorData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.DistributorData as ApiDropdownData[],
+          sectionType.Other
+        );
+
+        this.filterModel.Distributors = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.Distributor),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Distributors = [];
+      }
+
+      // chain
+      if (this.filterDropdownOutput.ChainData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.ChainData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.Chains = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.Chain),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Chains = [];
+      }
+
+      // enrolledBy
+      if (this.filterDropdownOutput.EnrolledByData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.EnrolledByData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.EnrolledBys = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.EnrolledBy),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.EnrolledBys = [];
+      }
+
+      // Mwc Parent Chain Names
+      if (this.filterDropdownOutput.MwcParentChainNameData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.MwcParentChainNameData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.MwcParentChainNames = this.retainSelection(
+          this.selectedFilters.filter(
+            (x) => x.Type == sections.MwcParentChainName
+          ),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.MwcParentChainNames = [];
+      }
+
+      // Mwc  DivChain Names
+      if (this.filterDropdownOutput.MwcDivChainNameData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.MwcDivChainNameData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.MwcDivChainNames = this.retainSelection(
+          this.selectedFilters.filter(
+            (x) => x.Type == sections.MwcDivChainName
+          ),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.MwcDivChainNames = [];
+      }
+      // Sales Directors
+      if (this.filterDropdownOutput.SalesDirectorData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.SalesDirectorData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.SalesDirectors = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.SalesDirector),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.SalesDirectors = [];
+      }
+
+      // Dsm  Broker Managers
+      if (this.filterDropdownOutput.DsmBrokerManagerData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.DsmBrokerManagerData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.DsmBrokerManagers = this.retainSelection(
+          this.selectedFilters.filter(
+            (x) => x.Type == sections.DsmBrokerManager
+          ),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.DsmBrokerManagers = [];
+      }
+
+      // public CdmAccountManagers: Dropdowndata[];
+      if (this.filterDropdownOutput.CdmAccountManagerData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.CdmAccountManagerData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.CdmAccountManagers = this.retainSelection(
+          this.selectedFilters.filter(
+            (x) => x.Type == sections.CdmAccountManager
+          ),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.CdmAccountManagers = [];
+      }
+
+      // Districts
+      if (this.filterDropdownOutput.DistrictData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.DistrictData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.Districts = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.District),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Districts = [];
+      }
+
+      // Sub Districts
+      if (this.filterDropdownOutput.SubDistrictData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.SubDistrictData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.SubDistricts = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.SubDistrict),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.Districts = [];
+      }
+
+      //Dist Areas
+      if (this.filterDropdownOutput.DistAreaData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.DistAreaData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.DistAreas = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.DistArea),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.DistAreas = [];
+      }
+
+      // Dist Sales Reps
+      if (this.filterDropdownOutput.DistSalesRepData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.DistSalesRepData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.DistSalesReps = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.DistSalesRep),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.DistSalesReps = [];
+      }
+
+      //Retail Areas
+      if (this.filterDropdownOutput.RetailAreaData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.RetailAreaData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.RetailAreas = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.RetailArea),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.RetailAreas = [];
+      }
+
+      // Retail Sales Reps
+      if (this.filterDropdownOutput.RetailSalesRepData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.RetailSalesRepData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.RetailSalesReps = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.RetailSalesRep),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.RetailSalesReps = [];
+      }
+
+      // Account Key
+      if (this.filterDropdownOutput.KeyAccountData) {
+        convertedApiData = null;
+        convertedApiData = this.convertDropdownDataToFilterModal(
+          this.filterDropdownOutput.KeyAccountData as ApiDropdownData[],
+          sectionType.Other
+        );
+        this.filterModel.KeyAccounts = this.retainSelection(
+          this.selectedFilters.filter((x) => x.Type == sections.KeyAccount),
+          convertedApiData
+        );
+      } else {
+        this.filterModel.KeyAccounts = [];
+      }
+
+      sessionStorage.setItem('isSpinnerRequired', 'no');
+
+      this.setPrimaryDataAfterUpdation();
+      convertedApiData = null;
+    }
   }
 
   private convertDropdownDataToFilterModal(
@@ -983,8 +1122,7 @@ export class BaseClientComponent implements OnInit {
   private setValueToNullIfBlank(value: string): string {
     if (value == '') {
       return null;
-    }
-    else {
+    } else {
       return value;
     }
   }
@@ -1217,7 +1355,7 @@ export class BaseClientComponent implements OnInit {
         }
       }
     }
-    // Dist Sales Rep 
+    // Dist Sales Rep
     if (type == sections.DistSalesRep || type == '') {
       if (this.filterModel.DistSalesReps) {
         for (let i = 0; i < this.filterModel.DistSalesReps.length; i++) {
@@ -1246,7 +1384,7 @@ export class BaseClientComponent implements OnInit {
         }
       }
     }
-    // Retail Sales Rep 
+    // Retail Sales Rep
     if (type == sections.RetailSalesRep || type == '') {
       if (this.filterModel.RetailSalesReps) {
         for (let i = 0; i < this.filterModel.RetailSalesReps.length; i++) {
@@ -1275,12 +1413,13 @@ export class BaseClientComponent implements OnInit {
         }
       }
     }
-
   }
 
   private isDisplayChainOrNot() {
     if (this.selectedFilters) {
-      let _isexist = this.selectedFilters.filter(x => x.Type == sections.StoreType && x.Value == 'Chain');
+      let _isexist = this.selectedFilters.filter(
+        (x) => x.Type == sections.StoreType && x.Value == 'Chain'
+      );
       this.isDisplayChain = _isexist.length > 0 ? true : false;
       if (!this.isDisplayChain) {
         if (this.filterModel.Chains) {
@@ -1411,9 +1550,7 @@ export class BaseClientComponent implements OnInit {
           }
         }
       }
-
     } else {
-
       //storeType
       if (type == sections.StoreType) {
         for (let i = 0; i < this.filterModel.StoreTypes.length; i++) {
@@ -1448,7 +1585,6 @@ export class BaseClientComponent implements OnInit {
           }
         }
       }
-
 
       //MwcParentChainNames
       if (type == sections.MwcParentChainName) {
@@ -1529,11 +1665,12 @@ export class BaseClientComponent implements OnInit {
         }
       }
 
-      let _arraySelectedItem = this.selectedFilters.filter(x => x.Type != type);
+      let _arraySelectedItem = this.selectedFilters.filter(
+        (x) => x.Type != type
+      );
       if (_arraySelectedItem) {
         this.selectedFilters = _arraySelectedItem;
-      }
-      else {
+      } else {
         this.selectedFilters = [];
       }
     }
@@ -1545,8 +1682,7 @@ export class BaseClientComponent implements OnInit {
   private checkIfDataExists(item: any): boolean {
     if (item == null || item == undefined || item == NaN || item == '') {
       return false;
-    }
-    else {
+    } else {
       if (Array.isArray(item)) {
         if (item.length == 0) {
           return false;
@@ -1559,80 +1695,81 @@ export class BaseClientComponent implements OnInit {
   private setPrimaryDataAfterUpdation() {
     //region
     if (this.selectedSection == sections.Region) {
-      this.setPrimaryData(this.filterModel.Regions)
+      this.setPrimaryData(this.filterModel.Regions);
     }
     //area
     else if (this.selectedSection == sections.Area) {
-      this.setPrimaryData(this.filterModel.Areas)
+      this.setPrimaryData(this.filterModel.Areas);
     }
     //territory
     else if (this.selectedSection == sections.Territory) {
-      this.setPrimaryData(this.filterModel.Territories)
+      this.setPrimaryData(this.filterModel.Territories);
     }
     // dist
     else if (this.selectedSection == sections.Distributor) {
-      this.setPrimaryData(this.filterModel.Distributors)
+      this.setPrimaryData(this.filterModel.Distributors);
     }
     // chain
     else if (this.selectedSection == sections.Chain) {
-      this.setPrimaryData(this.filterModel.Chains)
+      this.setPrimaryData(this.filterModel.Chains);
     }
     //enrolled by
     else if (this.selectedSection == sections.EnrolledBy) {
-      this.setPrimaryData(this.filterModel.EnrolledBys)
+      this.setPrimaryData(this.filterModel.EnrolledBys);
     }
     //store type
     else if (this.selectedSection == sections.StoreType) {
-      this.setPrimaryData(this.filterModel.StoreTypes)
+      this.setPrimaryData(this.filterModel.StoreTypes);
     }
 
     /* CLIENT SPECIFIC FILTERS*/
 
     //MwcParentChainName
     else if (this.selectedSection == sections.MwcParentChainName) {
-      this.setPrimaryData(this.filterModel.MwcParentChainNames)
+      this.setPrimaryData(this.filterModel.MwcParentChainNames);
     }
 
     //MwcDivChainName
     else if (this.selectedSection == sections.MwcDivChainName) {
-      this.setPrimaryData(this.filterModel.MwcDivChainNames)
+      this.setPrimaryData(this.filterModel.MwcDivChainNames);
     }
-
 
     //SalesDirector
     else if (this.selectedSection == sections.SalesDirector) {
-      this.setPrimaryData(this.filterModel.SalesDirectors)
+      this.setPrimaryData(this.filterModel.SalesDirectors);
     }
     //DsmBrokerManager
     else if (this.selectedSection == sections.DsmBrokerManager) {
-      this.setPrimaryData(this.filterModel.DsmBrokerManagers)
+      this.setPrimaryData(this.filterModel.DsmBrokerManagers);
     }
     //CdmAccountManager
     else if (this.selectedSection == sections.CdmAccountManager) {
-      this.setPrimaryData(this.filterModel.CdmAccountManagers)
+      this.setPrimaryData(this.filterModel.CdmAccountManagers);
     }
     //District
     else if (this.selectedSection == sections.District) {
-      this.setPrimaryData(this.filterModel.Districts)
+      this.setPrimaryData(this.filterModel.Districts);
     }
     //SubDistrict
     else if (this.selectedSection == sections.SubDistrict) {
-      this.setPrimaryData(this.filterModel.SubDistricts)
+      this.setPrimaryData(this.filterModel.SubDistricts);
     }
 
     //DistArea
     else if (this.selectedSection == sections.DistArea) {
-      this.setPrimaryData(this.filterModel.DistAreas)
+      this.setPrimaryData(this.filterModel.DistAreas);
     }
 
     //DistSalesRep
     else if (this.selectedSection == sections.DistSalesRep) {
-      this.setPrimaryData(this.filterModel.DistSalesReps)
+      this.setPrimaryData(this.filterModel.DistSalesReps);
     }
-
   }
 
-  private retainSelection(selectedFilterList: SelectedFilterItem[], apiList: Dropdowndata[]): Dropdowndata[] {
+  private retainSelection(
+    selectedFilterList: SelectedFilterItem[],
+    apiList: Dropdowndata[]
+  ): Dropdowndata[] {
     if (!this.checkIfDataExists(apiList)) {
       return apiList;
     }
@@ -1669,14 +1806,12 @@ enum sections {
   DistSalesRep = 'distSalesRep',
   RetailArea = 'retailArea',
   RetailSalesRep = 'retailSalesRep',
-  KeyAccount = 'keyAccount'
+  KeyAccount = 'keyAccount',
 }
 
 enum sectionType {
   SalesHierarchy = 'SalesHierarchy',
   AccountHierarchy = 'AccountHierarchy',
   RetailerAccounts = 'RetailerAccounts',
-  Other = 'Other'
+  Other = 'Other',
 }
-
-
